@@ -1,0 +1,52 @@
+body{
+    background-color: #8f8f8f;
+}
+
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+.background-drawer{
+    background-color: #05046e;
+}
+
+.padding-page{
+    padding-left:6%; 
+    padding-right:6%;
+}
+
+.page-color{
+    color:white;
+}
+
+@media (min-width: 1024px) {
+
+.flex-md{
+    display: flex;
+}
+
+.margin-flex{
+    margin-left:10px;
+    margin-right:10px;
+}
+}
+  
+@media (max-width: 1024px) {
+    .flex-md{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .margin-flex{
+        margin-top:10px;
+        margin-bottom:10px;
+    }
+}
+
+@media print {
+
+    .print-component-hide {
+      display: none;
+    }
+  
+  }
