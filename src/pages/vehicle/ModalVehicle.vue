@@ -73,13 +73,13 @@
           </div>
           <div class="col-12 col-md-12 q-mt-md">
             <q-btn
-              v-if="!viewUpdate"
+              v-if="!viewFilds"
               label="Salvar"
               color="positive"
               type="submit"
             />
             <q-btn
-              v-if="viewUpdate"
+              v-if="viewFilds"
               label="Alterar"
               color="primary"
               @click="enableFilds"
@@ -117,7 +117,7 @@ export default {
   },
 
   async created() {
-    this.allClients = await this.apiGet('customers');
+    
   },
 
   methods: {
@@ -133,7 +133,8 @@ export default {
         }
       });
     },
-    openModal(id = 0, disabledFilds = false) {
+    async openModal(id = 0, disabledFilds = false) {
+      this.allClients = await this.apiGet('customers');
       this.modalVehicle = true;
       this.viewFilds = disabledFilds;
       this.viewUpdate = disabledFilds;
@@ -182,7 +183,7 @@ export default {
 
     submitForm(e){
       e.preventDefault();
-      if(!this.viewUpdate){
+      if(this.viewUpdate){
         this.editVehicle();
       }else{
         this.saveVehicle();
@@ -190,7 +191,6 @@ export default {
     },
     enableFilds(){
       this.viewFilds = false;
-      this.viewUpdate = false;
     },
   }
 };

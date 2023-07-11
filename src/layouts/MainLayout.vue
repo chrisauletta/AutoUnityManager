@@ -21,9 +21,10 @@
       bordered
       v-model="leftDrawerOpen"
       side="left"
-      class="background-drawer"
+      class="background-drawer column justify-between"
       :width="200"
     >
+    <!-- <div class="column justify-between"> -->
       <q-list>
         <q-item dark clickable to="/budgets">
           <q-item-section avatar>
@@ -61,7 +62,17 @@
           </q-item-section>
           <q-item-section> Fornecedores </q-item-section>
         </q-item>
+        <q-item dark clickable to="/company">
+          <q-item-section avatar>
+            <q-icon name="o_settings" />
+          </q-item-section>
+          <q-item-section> Configurações </q-item-section>
+        </q-item>
       </q-list>
+      <label class="q-ml-sm" style="color: white;">
+        {{$store.state.company.name}}
+      </label>
+    <!-- </div> -->
     </q-drawer>
 
     <q-page-container>
@@ -85,6 +96,7 @@ export default {
   computed: {},
 
   created() {
+    document.getElementsByTagName('body')[0].style.overflow = "auto";
     // this.$axios
     //   .post('http://localhost:8000/clients', {
     //     filtro:"todos",

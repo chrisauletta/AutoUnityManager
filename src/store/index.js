@@ -20,7 +20,8 @@ export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     state: {
       aviso:null,
-      user:{token:"", name:""}
+      user:{token:"", name:""},
+      company:{}
     },
     getters:{
       getAviso:state =>{
@@ -28,6 +29,9 @@ export default store(function (/* { ssrContext } */) {
       },
       getUser:state => {
         return state.user
+      },
+      getCompany:state => {
+        return state.company
       }
     },
     mutations:{
@@ -36,6 +40,9 @@ export default store(function (/* { ssrContext } */) {
       },
       setUser(state, param){
         state.user = {token:param.token, name:param.name}
+      },
+      setCompany(state, param){
+        state.company = param
       }
     },
     // plugins: [

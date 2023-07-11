@@ -81,7 +81,7 @@
               class="q-mt-sm"
             />
             <q-btn
-              v-if="viewUpdate && viewFilds"
+              v-if="viewFilds"
               label="Alterar"
               color="primary"
               class="q-mt-sm"
@@ -151,7 +151,6 @@ export default {
     },
     enableFilds(){
       this.viewFilds = false;
-      this.viewUpdate = true;
     },
 
     async save() {

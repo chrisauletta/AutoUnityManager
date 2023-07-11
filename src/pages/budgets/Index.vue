@@ -52,7 +52,7 @@
               class="col-grow margin-flex"
             />
           </div>
-          <div class="col-12 col-md-6">
+          <div class="col-2 col-md-6">
             <q-btn
               stack
               color="primary"
@@ -62,7 +62,7 @@
               @click="tratarFiltro()"
             />
           </div>
-          <div class="col-12 col-md-2 row justify-end">
+          <div class="col-10 col-md-2 row justify-end">
             <q-btn
               padding="md"
               color="positive"
@@ -129,18 +129,19 @@ export default {
           required: true,
         },
         {
-          name: "Situação",
-          field: "situation",
-          label: "Situação",
+          name: "Status",
+          field: (row) => (row.StatusBudget ? row.StatusBudget.nome : "-"),
+          label: "Status",
           align: "left",
           required: true,
         },
         {
-          name: "Status",
-          field: "status",
-          label: "Status",
+          name: "Data Entrada",
+          field: (row) => (row.dateInput ? new Date(row.dateInput).toLocaleString() : "-"),
+          label: "Data Entrada",
           align: "left",
           required: true,
+          sortable: true,
         },
         {
           name: "buttons",
@@ -168,10 +169,12 @@ export default {
   created() {
     //this.$tools.teste();
     this.buscarOrcamentos();
+    
   },
   methods: {
     async buscarOrcamentos() {
       this.rows = await this.apiGet("budgets");
+      console.log(this.rows);
       //this.rows = await this.findBudget(this.$tools.serialize(query));
     },
     async tratarFiltro() {
@@ -202,7 +205,6 @@ export default {
       }
       var search = await this.apiGet("budgets/find?", this.$tools.serialize(query));
       if(search.length > 0){
-        console.log(search);
         this.rows = search;
       }
     },

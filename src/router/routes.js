@@ -13,7 +13,8 @@ const routes = [
       { path: '/vehicles', component: () => import('src/pages/vehicle/Index.vue') },
       { path: '/parts', component: () => import('src/pages/part/Index.vue') },
       { path: '/providers', component: () => import('src/pages/provider/Index.vue') },
-      { path: '/services', component: () => import('src/pages/service/Index.vue') }
+      { path: '/services', component: () => import('src/pages/service/Index.vue') },
+      { path: '/company', component: () => import('src/pages/company/Index.vue') }
     ],
     meta:{
       requiresAuth:true
@@ -26,23 +27,26 @@ const routes = [
       { path: '/signup', name:"signup", component: () => import('src/pages/auth/Signup.vue') },
     ]
   },
-
+{
+    path: '/:catchAll(.*)*',
+    component: () => import('pages/error/Error404.vue')
+  },
   // Always leave this as last one,
   // but you can also remove it
-  {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/error/Error404.vue'),
-    meta:{
-      requiresAuth:true
-    }
-  },
-  {
-    path: '/:catchAll(.*)*',
-    component: () => import('src/pages/auth/Login.vue'),
-    meta:{
-      requiresAuth:false 
-    }
-  }
+  // {
+  //   path: '/:catchAll(.*)*',
+  //   component: () => import('pages/error/Error404.vue'),
+  //   meta:{
+  //     requiresAuth:true
+  //   }
+  // },
+  // {
+  //   path: '/:catchAll(.*)*',
+  //   component: () => import('pages/error/Error404.vue'),
+  //   meta:{
+  //     requiresAuth:false 
+  //   }
+  // }
 ]
 
 export default routes

@@ -99,7 +99,7 @@
               class="q-mt-sm"
             />
             <q-btn
-              v-if="viewUpdate"
+              v-if="viewFilds"
               label="Alterar"
               color="primary"
               class="q-mt-sm"
@@ -161,7 +161,6 @@ export default {
         }
         var search = await this.apiGet('parts/find?',this.$tools.serialize(query));
         if(search.length > 0){
-          console.log(search);
           this.dataParts = search[0];
         }
       }else{
@@ -188,7 +187,6 @@ export default {
     },
     enableFilds(){
       this.viewFilds = false;
-      this.viewUpdate = true;
     },
     submitForm(e){
       e.preventDefault();
@@ -207,7 +205,9 @@ export default {
         if (val) {
           const needle = val.toLowerCase();
           this.optionProvider = this.allProvider.filter(
-            (v) => v.provider_name.toLowerCase().indexOf(needle) > -1
+            (v) => {
+              return v.providerName.toLowerCase().indexOf(needle) > -1
+              }
           );
         } else {
           this.optionProvider = this.allProvider;

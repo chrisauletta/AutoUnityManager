@@ -121,14 +121,14 @@
             <q-input label="Observação" v-model="dataCustomer.note" type="text" filled :disable="viewFilds"/>
           </div>
           <q-btn
-            v-if="!viewFilds"
+            v-if="!viewUpdate"
             label="Salvar"
             type="submit"
             color="positive"
             class="q-mt-sm"
           />
           <q-btn
-            v-if="viewFilds"
+            v-if="viewUpdate"
             label="Alterar"
             color="primary"
             class="q-mt-sm"
@@ -229,10 +229,11 @@ export default {
     },
     enableFilds(){
       this.viewFilds = false;
+      this.viewUpdate = false;
     },
     submitForm(e){
       e.preventDefault();
-      if(this.viewUpdate){
+      if(!this.viewUpdate){
         this.editCustomer();
       }else{
         this.saveCustomer();

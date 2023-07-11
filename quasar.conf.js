@@ -10,6 +10,10 @@ const { configure } = require('quasar/wrappers');
 
 module.exports = configure(function (ctx) {
   return {
+
+    env: {
+      FOO: 'hello',
+    },
     // https://v2.quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
 

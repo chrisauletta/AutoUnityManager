@@ -25,7 +25,7 @@ export default {
 							position: "top-right",
 							message: "Cadastro com sucesso",
 						});
-						resolve(response.data);
+						resolve(response.data.Data);
 					})
 					.catch((err) => {
 						this.$tools.exceptionCustom(err, this);
@@ -42,7 +42,7 @@ export default {
 							position: "top-right",
 							message: "Cadastro com sucesso",
 						});
-						resolve(response.data);
+						resolve(response.data.Data);
 					})
 					.catch((err) => {
 						this.$tools.exceptionCustom(err, this);
@@ -57,9 +57,9 @@ export default {
 						this.$q.notify({
 							type: "positive",
 							position: "top-right",
-							message: "removido com sucesso",
+							message: "Removido com sucesso",
 						});
-						resolve(response.data);
+						resolve(response.data.Data);
 					})
 					.catch((err) => {
 						reject(err);

@@ -99,18 +99,17 @@
           <div class="col-12 col-md-8">
             <q-input
               label="Anotações"
-              v-model="dataBudget.note"
+              v-model="dataBudget.event"
               type="text"
               class="q-mr-sm"
               lazy-rules
               filled
-              :rules="[(val) => (val && val.length > 0) || 'Campo Invalido']"
             />
           </div>
           <div class="col-12 col-md-4">
             <q-input
-            stack-label
-            label="teste"
+              stack-label
+              label="Data de Entrada"
               placeholder="Data de Enterada"
               v-model="dataBudget.dateInput"
               type="date"
@@ -165,7 +164,7 @@ export default {
 
       dataBudget: {
         km: 0,
-        note: "",
+        event: "",
         dateInput:""
       },
       modalVehicle: false,
@@ -207,7 +206,6 @@ export default {
           position: "top-right",
           message: "Cadastro com sucesso",
         });
-        console.log(budget);
         this.$router.push(String(budget.id))
       } catch (err) {
         console.log(err);

@@ -3,8 +3,8 @@
     <div class="row background-header">
       <q-card class="q-mb-sm q-mt-md print-component-hide" style="width:100%">
         <q-card-section>
-          <div class="fit row  justify-between">
-            <q-btn label="voltar" color="red" to="/budget" />
+          <div class="fit row justify-between">
+            <q-btn label="voltar" color="red" :to="'/budgets/'+$route.params.idBudget" />
             <q-btn label="Imprimir" color="primary" v-close-popup @click="testePrint()" />
           </div>
         </q-card-section>
@@ -16,17 +16,32 @@
         <div class="col-6"></div>
       </div>
 
-      <div class="row column border-report q-mt-sm">
-        <label>Cliente: {{dataBudget.vehicle.customer.name}}</label>
-        <label>Contato: {{dataBudget.vehicle.customer.cell}}</label>
+      <div class="row justify-between border-report q-mt-sm">
+        <div class="row column">
+          <label>Oficina: {{$store.state.company.name}}</label>
+          <label>Contato: {{$store.state.company.telephone}} / {{$store.state.company.cell}}</label>
+          <label>E-mail: {{$store.state.company.email}}</label>
+          <label>Endereço: {{$store.state.company.street}} , {{$store.state.company.number}} - {{$store.state.company.district}} - {{$store.state.company.city}} / {{$store.state.company.state}}</label>
+        </div>
+        <img
+          class="self-center"
+          :src="$url+'company/logo/'+$store.state.company.logo"
+          style="height: 100px; width: 150px"
+        />
       </div>
 
-      <div class="row column border-report q-mt-sm">
-        <label>Veiculo:  {{dataBudget.vehicle.model+' '+dataBudget.vehicle.brand}}</label>
-        <label>Placa: {{dataBudget.vehicle.plate}}</label>
-        <label>Cor: {{dataBudget.vehicle.color}}</label>
-        <label>Km: {{dataBudget.km}}</label>
-        <label>Data de Entrada: {{new Date(dataBudget.usuincDt).toLocaleString()}}</label>
+      <div class="row column border-report q-mt-sm q-pa-sm">
+        <div class="row justify-between">
+          <label>Veiculo:  {{dataBudget.vehicle.model+' '+dataBudget.vehicle.brand}}</label>
+          <label>Placa: {{dataBudget.vehicle.plate}}</label>
+          <label>Cor: {{dataBudget.vehicle.color}}</label>
+          <label>Km: {{dataBudget.km}}</label>
+        </div>
+        <div class="row justify-between">
+          <label>Data de Entrada: {{new Date(dataBudget.usuincDt).toLocaleString()}}</label>
+          <label>Cliente: {{dataBudget.vehicle.customer.name}}</label>
+          <label>Contato: {{dataBudget.vehicle.customer.cell}}</label>
+        </div>
       </div>
 
       <div class="row q-mt-sm">
@@ -58,7 +73,7 @@
           </thead>
           <tbody>
             <tr v-for="(service, index) in rowsServices" :key="index">
-              <td class="border-table">{{service.namePart}}</td>
+              <td class="border-table">{{service.nameService}}</td>
               <td class="border-table">{{$tools.converterReal(service.value)}}</td>
             </tr>
           </tbody>
@@ -77,15 +92,15 @@
             <tbody>
               <tr>
                 <td class="border-table">Peças</td>
-                <td class="border-table">{{$tools.converterReal(countList(rowsParts))}}</td>
+                <td class="border-table">{{$tools.converterReal(countPart(rowsParts))}}</td>
               </tr>
               <tr>
                 <td class="border-table">Serviços</td>
-                <td class="border-table">{{$tools.converterReal(countList(rowsServices))}}</td>
+                <td class="border-table">{{$tools.converterReal(countService(rowsServices))}}</td>
               </tr>
               <tr>
                 <td class="border-table">Total</td>
-                <td class="border-table">{{(countList(rowsServices) + countList(rowsParts)).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</td>
+                <td class="border-table">{{(countService(rowsServices) + countPart(rowsParts)).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</td>
               </tr>
             </tbody>
           </table>
@@ -143,9 +158,24 @@ export default {
     findBudgetPart(teste){
       console.log("teste");
     },
-    countList(list){
+    countPart(list){
       if(list.length > 0){
-        return  list.reduce((a,b) => a.value + b.value);
+        var soma = 0;
+        list.forEach((el) => {
+          soma += (el.quantity * el.value);
+        });
+        return soma;
+      }else{
+        return 0;
+      }
+    },
+    countService(list){
+      if(list.length > 0){
+        var soma = 0;
+        list.forEach((el) => {
+          soma +=  parseInt(el.value);
+        });
+        return soma;
       }else{
         return 0;
       }

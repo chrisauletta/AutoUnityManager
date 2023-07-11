@@ -7,9 +7,9 @@
         <hr />
       </div>
 <!-- HEADER -->
-      <q-card-section class="q-mb-md">
+      <q-card-section class="q-mb-sm">
         <div class="row">
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-md-4 q-pa-sm">
             <q-input
               v-model="dataBudget.vehicle.plate"
               type="text"
@@ -18,9 +18,9 @@
               filled
             />
           </div>
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-md-4 q-pa-sm">
             <q-input
-              class="q-mx-md"
+              
               :model-value="dataBudget.vehicle.model+' '+dataBudget.vehicle.brand"
               type="text"
               label="Veiculo"
@@ -28,39 +28,48 @@
               filled
             />
           </div>
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-md-4 q-pa-sm">
             <q-input
-              v-model="dataBudget.km"
+              :label="$tools.formataData(dataBudget.dateInput)"
               type="text"
-              label="Data de Entrada"
               disable
               filled
             />
           </div>
         </div>
         <div class="row q-mt-sm">
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-md-4 q-pa-sm">
             <q-input
               v-model="dataBudget.vehicle.customer.name"
               type="text"
-              label="Status"
+              label="Cliente"
               disable
               filled
             />
           </div>
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-md-3 q-pa-sm">
             <q-input
-              class="q-mx-md"
-              v-model="dataBudget.createAt"
+              class=""
+              v-model="dataBudget.vehicle.customer.cell"
+              type="text"
+              label="Contato"
+              disable
+              filled
+            />
+          </div>
+          <div class="col-12 col-md-2 q-pa-sm">
+            <q-input
+              
+              v-model="dataBudget.km"
               type="text"
               label="Quilometragem"
               disable
               filled
             />
           </div>
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-md-3 q-pa-sm">
             <q-input
-              v-model="dataBudget.situation"
+              v-model="dataBudget.StatusBudget.nome"
               type="text"
               label="Cliente"
               disable
@@ -69,6 +78,18 @@
           </div>
         </div>
       </q-card-section>
+
+      <div class="row q-ml-lg">
+    
+        <a :href="'https://api.whatsapp.com/send/?phone=55'+dataBudget.vehicle.customer.cell.replace('(','').replace(')', '').replace('-', '')" target="_blank">
+          <q-btn color="green" class="q-mr-sm" padding="13px" text-color="white">
+            <div class="row items-center no-wrap">
+              <whatsapp/>
+            </div>
+          </q-btn>
+        </a>
+
+      </div>
 <!-- PEÇAS -->
       <q-card-section>
         <div class="row">
@@ -118,25 +139,33 @@
                   type="text"
                   label="Valor"
                   filled
+                  mask="#.##"
+                  fill-mask="0"
+                  reverse-fill-mask
                   :disable="parts[index].save"
                 />
               </div>
               <div class="col-7 col-md-2 text-justify" v-if="parts[index].save">
-                <q-btn color="red" class="q-mr-sm" padding="13px" text-color="white">
+                <q-btn color="red" class="q-mr-sm" padding="13px" text-color="white" @click="deletePart(parts[index].id)">
                   <div class="row items-center no-wrap">
                     <q-icon size="2em" name="delete" />
                   </div>
                 </q-btn>
-                <q-btn color="blue" padding="13px" text-color="white" @click="parts[index].save = false">
+                <q-btn color="blue" padding="13px" text-color="white" @click="editPart(index)">
                   <div class="row items-center no-wrap">
                     <q-icon size="2em" name="edit" />
                   </div>
                 </q-btn>
               </div>
               <div class="col-7 col-md-2 text-justify" v-else>
-                <q-btn color="green" padding="13px" text-color="white" title="Salvar" @click="includePart(index)">
+                <q-btn color="green" class="q-mr-sm" padding="13px" text-color="white" title="Salvar" @click="includePart(index)">
                   <div class="row items-center no-wrap">
                     <q-icon size="2em" name="save" />
+                  </div>
+                </q-btn>
+                <q-btn color="red" padding="13px" text-color="white" title="Cancelar" @click="removeLinePart(index)">
+                  <div class="row items-center no-wrap">
+                    <q-icon size="2em" name="close" />
                   </div>
                 </q-btn>
               </div>
@@ -199,6 +228,10 @@
               <div class="col-12 col-md-2">
                 <q-input
                   v-model="services[index].value"
+                  :disable="services[index].save"
+                  mask="#.##"
+                  fill-mask="0"
+                  reverse-fill-mask
                   class="q-mx-sm"
                   type="text"
                   label="Valor"
@@ -206,21 +239,26 @@
                 />
               </div>
               <div class="col-7 col-md-2 text-justify" v-if="services[index].save">
-                <q-btn color="red" class="q-mr-sm" padding="13px" text-color="white">
+                <q-btn color="red" class="q-mr-sm" padding="13px" text-color="white" @click="deleteService(services[index].id)">
                   <div class="row items-center no-wrap">
                     <q-icon size="2em" name="delete" />
                   </div>
                 </q-btn>
-                <q-btn color="blue" padding="13px" text-color="white" @click="services[index].save = false">
+                <q-btn color="blue" padding="13px" text-color="white" @click="editService(index)">
                   <div class="row items-center no-wrap">
                     <q-icon size="2em" name="edit" />
                   </div>
                 </q-btn>
               </div>
               <div class="col-7 col-md-2 text-justify" v-else>
-                <q-btn color="green" padding="13px" text-color="white" title="Salvar" @click="includeService(index)">
+                <q-btn color="green" class="q-mr-sm" padding="13px" text-color="white" title="Salvar" @click="includeService(index)">
                   <div class="row items-center no-wrap">
                     <q-icon size="2em" name="save" />
+                  </div>
+                </q-btn>
+                <q-btn color="red" padding="13px" text-color="white" title="Cancelar" @click="removeLineService(index)">
+                  <div class="row items-center no-wrap">
+                    <q-icon size="2em" name="close" />
                   </div>
                 </q-btn>
               </div>
@@ -252,10 +290,12 @@
         <div class="row">
           <!-- <label class="text-h5">Observações</label> -->
           <div class="col-9">
-            <q-input v-model="obs" filled  type="text" label="Observações"/>
+            <q-input v-model="dataBudget.note" filled  type="textarea" rows="3" label="Observações"/>
           </div>
-          <div class="col-2" style="align-self: self-end;">
-            <label style="font-size:20px">Valor Total: {{totalValue}}</label>
+          <div class="col-3 column" style="align-self: self-end;">
+            <label style="font-size:20px">Valor Peças: {{totalParts.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</label>
+            <label style="font-size:20px">Valor Serviços: {{totalServices.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</label>
+            <label style="font-size:20px">Valor Total: {{totalValue.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</label>
           </div>
         </div>
         <div class="row q-mt-sm">
@@ -264,7 +304,7 @@
               class="q-mb-md q-mr-md"
               color="green"
               text-color="white"
-              label="Salvar"
+              label="Salvar Observação"
               @click="saveBudget()"
             />
             <q-btn
@@ -272,6 +312,7 @@
               color="green"
               text-color="white"
               label="Imprimir"
+              :to="'/budgets/report/'+$route.params.idBudget"
             />
           </div>
         </div>
@@ -290,10 +331,11 @@
 import ApiMixin from "boot/services/ApiMixin";
 import ModalPart from "pages/part/ModalPart";
 import ModalService from "pages/service/ModalService";
+import whatsapp from "components/svg/whatsapp";
 
 export default {
   mixins: [ApiMixin],
-  components: {ModalPart, ModalService},
+  components: {ModalPart, ModalService, whatsapp},
   name: "BudgetUpdate",
   data() {
     return {
@@ -301,7 +343,10 @@ export default {
         situation:"",
         km:"",
         createAt:"",
-
+        note:"",
+        StatusBudget:{
+          nome:""
+        },
         vehicle: {
           customer: {
             name: "",
@@ -314,7 +359,8 @@ export default {
         },
       },
       totalValue:0,
-
+      totalParts:0,
+      totalServices:0,
       tab: "movies",
       splitterModel: 0,
       obs:"",
@@ -359,10 +405,19 @@ export default {
       }
       this.parts.push({
         part:{},
-        quantity:0,
+        quantity:1,
         value:0,
-        save:false
+        save:false,
+        edit:false
       });
+    },
+    removeLinePart(index){
+      if(this.parts[index].edit){
+        this.parts[index].save = true;
+        this.parts[index].edit = false;
+      }else{
+        this.parts.pop();
+      }
     },
     async searchParts(){
       this.optionParts = await this.apiGet('parts');
@@ -373,7 +428,7 @@ export default {
         if (val) {
           const needle = val.toLowerCase();
           this.optionParts = this.allParts.filter(
-            (v) => v.namePart.toLowerCase().indexOf(needle) > -1
+            (v) => v.name.toLowerCase().indexOf(needle) > -1
           );
         } else {
           this.optionParts = this.allParts;
@@ -385,11 +440,13 @@ export default {
       var partsAux = [];
       parts.forEach((el) => {
         partsAux.push({save : true,
+                      edit : false,
                       part : el,
                       quantity:el.quantity,
                       value:el.value,
                       id: el.id});
-        this.totalValue += el.value;                      
+        this.totalValue += (el.quantity * el.value);  
+        this.totalParts += (el.quantity * el.value);
       });
       
       this.parts = partsAux;
@@ -405,22 +462,58 @@ export default {
       var response = null;
       if(partAux.id){
         query.id = partAux.id;
-        response = await this.apiPut('budgetsParts', query)
+        response = await this.apiPut('budgetsParts', query);
       }else{
         response = await this.apiPost('budgetsParts', query)
+        this.parts[index].id = response.id;
       }
-      
-      if(response){
-        this.parts[this.parts.length - 1].save = true
-      }
+      this.parts[index].save = true;
+      var valuePart = parseInt(partAux.quantity) * parseFloat(partAux.value);
+      this.totalValue += valuePart;
+      this.totalParts += valuePart;
+    },
+    editPart(index){
+      this.parts[index].save = false
+      this.parts[index].edit = true;
+      var valuePart = parseInt(this.parts[index].quantity) * parseFloat(this.parts[index].value);
+      this.totalValue -= valuePart;
+      this.totalParts -= valuePart;
+    },
+    async deletePart(id){
+      var indexPart = this.parts.findIndex((el) => el.id == id);
+      var part = this.parts[indexPart];
+      var valuePart = part.quantity * part.value;
+      var partAux = this.parts;
+      partAux.splice(indexPart,1);
+      this.parts = partAux;
+      this.totalValue -= valuePart;
+      this.totalParts -= valuePart;
+      await this.apiDelete('budgetsParts',id);
     },
 
     addLineService() {
+      if(this.services.length > 0 && this.services[this.services.length - 1].save == false){
+        this.$q.notify({
+								type: "negative",
+								position: "top-right",
+								message: "Salve o ultimo serviço",
+							});
+        return;
+      }
       this.services.push({
         service:{},
         valueSale:0,
-        save:false
+        save:false,
+        edit:false
       });
+    },
+    removeLineService(index){
+      if(this.services[index].edit){
+        this.services[index].save = true;
+        this.services[index].edit = false;
+      }else{
+        this.services.pop();
+      }
     },
     async searchServices(){
       this.optionServices = await this.apiGet('services');
@@ -443,10 +536,12 @@ export default {
       var servicesAux = [];
       service.forEach((el) => {
         servicesAux.push({save : true,
+                          edit:false,
                          service : el,
                          value:el.value,
                          id:el.id});
-        this.totalValue += el.value;
+        this.totalValue += parseInt(el.value);
+        this.totalServices += parseInt(el.value);
       });
       
       this.services = servicesAux;
@@ -458,6 +553,15 @@ export default {
         serviceId:serviceAux.service.serviceId ? serviceAux.service.serviceId : serviceAux.service.id,
         value:serviceAux.value
       }
+      if(!query.serviceId){
+        this.$q.notify({
+          type: "negative",
+          position: "top-right",
+          message: "Serviço obrigatório",
+        });
+        return;
+      }
+      
       var response = null;
       if(serviceAux.id){
         query.id = serviceAux.id;
@@ -467,7 +571,34 @@ export default {
       }
       if(response){
         this.services[index].save = true
+        this.services[index].id = response.id;
       }
+      this.totalServices += parseInt(serviceAux.value);
+      this.totalValue += parseInt(serviceAux.value);
+    },
+    editService(index){
+      this.services[index].save = false;
+      this.services[index].edit = true;
+      var valueService = parseFloat(this.services[index].value);
+      this.totalValue -= valueService;
+      this.totalServices -= valueService;
+    },
+    async deleteService(id){
+      var indexService = this.services.findIndex((el) => el.id == id);
+      var serviceAux = this.services;
+      var valueService = parseInt(this.services[indexService].value);
+      serviceAux.splice(indexService,1);
+      this.services = serviceAux;
+      this.totalServices -= valueService;
+      this.totalValue -= valueService;
+      await this.apiDelete('budgetsServices',id);
+    },
+
+    async saveBudget(){
+      var entity = {
+        note: this.dataBudget.note
+      }
+      await this.apiPut('budgets/edit/'+this.$route.params.idBudget, entity);
     }
 
   },

@@ -1,8 +1,6 @@
 <template>
-  <q-layout view="hHh lpR fFf">
-    <q-page-container>
-      <router-view />
-    </q-page-container>
+  <q-layout view="hHh lpR fFf" style="overflow: hidden;">
+    <router-view />
   </q-layout>
 </template>
 

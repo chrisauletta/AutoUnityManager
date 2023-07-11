@@ -48,7 +48,7 @@
         <div class="row q-px-sm q-mt-md">
           <div class="col-12">
             <q-table
-              title="Clientes"
+              title="Fornecedores"
               :rows="rows"
               :columns="columns"
               row-key="id"

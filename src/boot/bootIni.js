@@ -7,7 +7,8 @@ import { Cookies } from 'quasar'
 
 
 export default boot(({ app, router, store }) => {
-  app.config.globalProperties.$url = "http://localhost:3000/";
+  app.config.globalProperties.$url = "http://localhost:21012/";
+  //app.config.globalProperties.$url = "http://auto-unity.kinghost.net:21012/";
  //app.config.globalProperties.$url = "https://aceita-frete-api.pl-tp.com.br/";
 
  app.config.globalProperties.$tools = tools;

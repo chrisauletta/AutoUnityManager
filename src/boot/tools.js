@@ -7,8 +7,8 @@ const serialize = (obj) => {
     return str.join("&");
   }
 
-const converteDataBr = (date) => {
-   // return date.
+const formataData = (date) => {
+   return new Date(date).toLocaleString();
 }
 
 const converterReal = (valor) => {
@@ -35,5 +35,6 @@ const exceptionCustom = (err, context) =>{
 export {
     serialize,
     exceptionCustom,
-    converterReal
+    converterReal,
+    formataData
 }

@@ -130,7 +130,7 @@ export default {
       this.rows = await this.apiGet("customers");
     },
 
-    tratarFiltro() {
+    async tratarFiltro() {
       var query = {
         search:true
       };
@@ -146,7 +146,10 @@ export default {
           query.table = "customer";
           break;
       }
-      this.searchCustomer(query);
+      var search = await this.apiGet("customers/find?", this.$tools.serialize(query));
+      if(search.length > 0){
+        this.rows = search;
+      }
     },
     linkCarregamento(row) {
       this.$store.commit("setCarregamento", row);

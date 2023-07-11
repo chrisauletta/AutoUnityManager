@@ -7,7 +7,8 @@ import axios from 'axios'
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({ baseURL: 'http://localhost:3000/' })
+//const api = axios.create({ baseURL: 'http://auto-unity.kinghost.net:21012/' })
+const api = axios.create({ baseURL: 'http://localhost:21012/' })
 
 export default boot(({ app, store, router }) => {
   app.config.globalProperties.$axios = axios
