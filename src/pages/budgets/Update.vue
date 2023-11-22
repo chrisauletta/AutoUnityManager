@@ -3,7 +3,7 @@
   <q-page padding v-else>
     <q-card class="q-mb-lg">
       <div class="col-6 text-black q-pa-xs">
-        <h5 style="margin: 0px">Criar Ordem de Serviço</h5>
+        <h5 style="margin: 0px">Ordem de Serviço - {{dataBudget.id}}</h5>
         <hr />
       </div>
 <!-- HEADER -->
@@ -20,7 +20,6 @@
           </div>
           <div class="col-12 col-md-4 q-pa-sm">
             <q-input
-              
               :model-value="dataBudget.vehicle.model+' '+dataBudget.vehicle.brand"
               type="text"
               label="Veiculo"
@@ -30,10 +29,11 @@
           </div>
           <div class="col-12 col-md-4 q-pa-sm">
             <q-input
-              :label="$tools.formataData(dataBudget.dateInput)"
+              :model-value="$tools.formataData(dataBudget.dateInput)"
               type="text"
               disable
               filled
+              label="Data de Entrada"
             />
           </div>
         </div>
@@ -58,8 +58,18 @@
             />
           </div>
           <div class="col-12 col-md-2 q-pa-sm">
-            <q-input
-              
+            <q-input    
+              v-model="dataBudget.vehicle.customer.mail"
+              type="text"
+              label="Quilometragem"
+              disable
+              filled
+            />
+          </div>
+        </div>
+        <div class="row q-mt-sm">
+          <div class="col-12 col-md-2 q-pa-sm">
+            <q-input    
               v-model="dataBudget.km"
               type="text"
               label="Quilometragem"
@@ -71,7 +81,16 @@
             <q-input
               v-model="dataBudget.StatusBudget.nome"
               type="text"
-              label="Cliente"
+              label="Status"
+              disable
+              filled
+            />
+          </div>
+          <div class="col-12 col-md-7 q-pa-sm">
+            <q-input
+              v-model="dataBudget.StatusBudget.nome"
+              type="text"
+              label="Status"
               disable
               filled
             />
@@ -116,7 +135,7 @@
                   <template v-slot:no-option>
                     <q-item>
                       <q-item-section class="text-grey">
-                        Não encontrou o cliente
+                        Não encontrou a peça
                       </q-item-section>
                     </q-item>
                   </template>
@@ -132,16 +151,30 @@
                   :disable="parts[index].save"
                 />
               </div>
-              <div class="col-12 col-md-2">
+              <div class="col-12 col-md-1">
                 <q-input
                   v-model="parts[index].value"
                   class="q-mx-sm"
                   type="text"
-                  label="Valor"
+                  label="Valor Uni."
                   filled
                   mask="#.##"
                   fill-mask="0"
                   reverse-fill-mask
+                  :disable="parts[index].save"
+                />
+              </div>
+              <div class="col-12 col-md-1">
+                <q-input
+                  :model-value="(parts[index].value * parts[index].quantity).toFixed(2)"
+                  class="q-mr-sm"
+                  type="text"
+                  label="Valor Total"
+                  filled
+                  mask="#.##"
+                  fill-mask="0"
+                  reverse-fill-mask
+                  disable
                   :disable="parts[index].save"
                 />
               </div>
@@ -387,6 +420,7 @@ export default {
     var budget = await this.apiGet('budgets/find?',this.$tools.serialize(query));
     if(budget.length > 0){
       this.dataBudget = budget[0];
+      console.log(this.dataBudget);
     }
     this.searchParts();
     this.searchServices();

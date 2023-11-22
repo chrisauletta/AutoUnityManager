@@ -105,6 +105,13 @@ export default {
       valueFilter: "",
       columns: [
         {
+          name: "ID",
+          field: (row) => (row.id ? row.id : "-"),
+          label: "ID",
+          align: "left",
+          required: true,
+        },
+        {
           name: "Placa",
           field: (row) => (row.vehicle.plate ? row.vehicle.plate : "-"),
           label: "Placa",

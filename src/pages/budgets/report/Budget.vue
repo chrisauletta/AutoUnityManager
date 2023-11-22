@@ -5,6 +5,20 @@
         <q-card-section>
           <div class="fit row justify-between">
             <q-btn label="voltar" color="red" :to="'/budgets/'+$route.params.idBudget" />
+            <q-btn-dropdown
+              color="primary"
+              label="Opções de Impressão"
+              class="flex-auto q-mr-sm"
+            >
+              <div class="row no-wrap q-pa-md">
+                <div class="column">
+                  <q-toggle v-model="optionValues" label="Valores" />
+                  <q-toggle v-model="optionNote" label="Anotações" />
+                  <q-toggle v-model="optionOs" label="Peças\Serviços" />
+                  <q-toggle v-model="optionCompany" label="Oficina" />
+                </div>
+              </div>
+            </q-btn-dropdown>
             <q-btn label="Imprimir" color="primary" v-close-popup @click="testePrint()" />
           </div>
         </q-card-section>
@@ -16,7 +30,7 @@
         <div class="col-6"></div>
       </div>
 
-      <div class="row justify-between border-report q-mt-sm">
+      <div class="row justify-between border-report q-mt-sm" v-if="optionCompany">
         <div class="row column">
           <label>Oficina: {{$store.state.company.name}}</label>
           <label>Contato: {{$store.state.company.telephone}} / {{$store.state.company.cell}}</label>
@@ -43,44 +57,61 @@
           <label>Contato: {{dataBudget.vehicle.customer.cell}}</label>
         </div>
       </div>
+      
+      <div class="row q-mt-sm" v-if="optionNote">
+        <table class="border-table border-width">
+          <thead>
+            <tr>
+              <th class="border-table">Anotações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border-table">{{dataBudget.note}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-      <div class="row q-mt-sm">
+      <div class="row q-mt-sm" v-if="optionOs">
         <table class="border-table border-width">
           <thead>
             <tr>
               <th class="border-table">Descrição da Peça</th>
               <th class="border-table">Qtd.</th>
-              <th class="border-table">Valor</th>
+              <th class="border-table" v-if="optionValues">Valor Unit.</th>
+              <th class="border-table" v-if="optionValues">Valor Total</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(part, index) in rowsParts" :key="index">
               <td class="border-table">{{part.namePart}}</td>
               <td class="border-table">{{part.quantity}}</td>
-              <td class="border-table">{{$tools.converterReal(part.value)}}</td>
+              <td class="border-table" v-if="optionValues">{{$tools.converterReal(part.value)}}</td>
+              <td class="border-table" v-if="optionValues">{{$tools.converterReal(part.quantity * part.value)}}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div class="row q-mt-sm">
+      <div class="row q-mt-sm" v-if="optionOs">
         <table class="border-table border-width">
           <thead>
             <tr>
               <th class="border-table">Descrição da Serviço</th>
-              <th class="border-table">Valor</th>
+              <th class="border-table" v-if="optionValues">Valor</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(service, index) in rowsServices" :key="index">
               <td class="border-table">{{service.nameService}}</td>
-              <td class="border-table">{{$tools.converterReal(service.value)}}</td>
+              <td class="border-table" v-if="optionValues">{{$tools.converterReal(service.value)}}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div id="teste" class="full-width row justify-end q-mt-sm">
+      <div class="full-width row justify-end q-mt-sm" v-if="optionValues">
         <div class="col-2"  style="display: inline-table;">
           <table class="border-table border-width">
             <thead>
@@ -137,6 +168,10 @@ export default {
       },
 			rowsParts:[],
 			rowsServices:[],
+      optionValues:true,
+      optionNote:false,
+      optionOs:true,
+      optionCompany:true
 		};
   },
   computed: {},
@@ -230,4 +265,7 @@ export default {
   width: 100%;
 }
 
+.flex-auto {
+  margin-left: auto;
+}
 </style>

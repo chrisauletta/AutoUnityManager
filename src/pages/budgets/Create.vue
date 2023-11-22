@@ -18,7 +18,7 @@
                   :options="optionsClient"
                   @filter="filterSelectClient"
                   @popup-hide="searchVehicle"
-                  :option-label="(opt) => opt.name"
+                  :option-label="(opt) => opt.name + ' - [' + opt.id + ']'"
                   use-input
                 >
                   <template v-slot:no-option>
@@ -57,7 +57,7 @@
                   input-debounce="0"
                   label="Veiculo"
                   :options="optionsVehicle"
-                  :option-label="(opt) => (opt ? opt.brand + ' - ' + opt.model : '')"
+                  :option-label="(opt) => (opt ? opt.brand + ' - ' + opt.model + ' - [' + opt.id + ']' : '')"
                   lazy-rules
                   :rules="[(val) => val || 'Campo Invalido']"
                 >
@@ -199,6 +199,8 @@ export default {
     async saveBudget(e) {
       e.preventDefault();
       this.dataBudget.vehicleId = this.selectedVehicle.id;
+      var data = new Date();
+      this.dataBudget.dateInput += ' ' + data.getHours() + ':' + data.getMinutes() + ':' + data.getSeconds();
       try {
         var budget = await this.apiPost('budgets', this.dataBudget);
         this.$q.notify({
@@ -208,7 +210,6 @@ export default {
         });
         this.$router.push(String(budget.id))
       } catch (err) {
-        console.log(err);
         this.$q.notify({
           type: "danger",
           position: "top-right",
