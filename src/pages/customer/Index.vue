@@ -138,12 +138,12 @@ export default {
         case "Nome":
           query.column = "name";
           query.value = this.valueFilter;
-          query.table = "customer";
+          query.table = "Customer";
           break;
         case "Todos":
           query.column = "name";
           query.value = 0;
-          query.table = "customer";
+          query.table = "Customer";
           break;
       }
       var search = await this.apiGet("customers/find?", this.$tools.serialize(query));

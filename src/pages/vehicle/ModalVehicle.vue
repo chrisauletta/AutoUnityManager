@@ -19,7 +19,7 @@
               label="Cliente"
               :options="optionsClient"
               @filter="filterSelectClient"
-              :option-label="(opt) => opt.name"
+              :option-label="(opt) => {return opt.name + ' - [' + opt.id + ']'}"
               use-input
               class="q-mr-sm"
               :disable="viewFilds"
@@ -117,7 +117,7 @@ export default {
   },
 
   async created() {
-    
+    console.log(this.dataVehicle);
   },
 
   methods: {
@@ -147,12 +147,13 @@ export default {
           model: "",
           year: 0,
           color: "",
-          customerId: 0,
+          customerId: null,
         }
       }
     },
 
     async searchVehicle(id){
+      console.log("teste");
       var query = {
         column: "id",
         value: id,

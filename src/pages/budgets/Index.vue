@@ -46,6 +46,7 @@
           </div>
           <div class="col-12 col-md-2">
             <q-input
+              :disable="disableFilter"
               v-model="valueFilter"
               filled
               label="Filtro"
@@ -62,15 +63,17 @@
               @click="tratarFiltro()"
             />
           </div>
-          <div class="col-10 col-md-2 row justify-end">
-            <q-btn
-              padding="md"
-              color="positive"
-              text-color="white"
-              icon-right="add"
-              label="Novo Orçamento"
-              to="/budgets/create"
-            />
+          <div class="col-10 col-md-2 ">
+            <div class="row justify-end q-mr-sm">
+              <q-btn
+                padding="md"
+                color="positive"
+                text-color="white"
+                icon-right="add"
+                label="Novo Orçamento"
+                to="/budgets/create"
+              />
+            </div>
           </div>
         </div>
         <div class="row q-px-sm q-mt-md">
@@ -159,13 +162,15 @@ export default {
         },
       ],
       rows: [],
-      selectedFilter: "Status Orçamento",
+      selectedFilter: "Todos",
       optionsFilter: [
+        "Todos",
         "Status Orçamento",
         "Placa",
         "Modelo Veiculo",
         "Nome Cliente",
       ],
+      disableFilter: false,
       rightDrawerOpen: false,
       initialPagination: {
         rowsPerPage: 10,
@@ -189,6 +194,10 @@ export default {
         search:true
       };
       switch (this.selectedFilter) {
+        case "Todos":
+          this.buscarOrcamentos();
+          return;
+          break;
         case "Status Orçamento":
           query.column = "status";
           query.value = "A";
@@ -201,7 +210,7 @@ export default {
           break;
         case "Modelo Veiculo":
           query.column = "model";
-          query.value = this.query;
+          query.value = this.valueFilter;
           query.table = "vehicle";
           break;
         case "Nome Cliente":
